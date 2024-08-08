@@ -2,7 +2,6 @@ import type { Request, Response } from "express";
 import List from "../models/Lists";
 
 export class ListController {
-
   // CREANDO LISTA
 
   static createList = async (req: Request, res: Response) => {
@@ -19,11 +18,28 @@ export class ListController {
   // OBTENIENDO TODAS LAS LISTAS
 
   static getAllLists = async (req: Request, res: Response) => {
-try {
-    const allLists = await List.find({})
-    res.json(allLists)
-} catch (error) {
-    console.log(error)
-}
+    try {
+      const allLists = await List.find({});
+      res.json(allLists);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // OBTENIENDO UNA LISTA POR ID
+
+  static getListById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+      const list = await List.findById(id);
+      if (!list) {
+        const error = new Error("Lista no encontrada");
+        return res.status(404).json({ error: error.message });
+      }
+      res.json(list);
+
+    } catch (error) {
+      console.log(error);
+    }
   };
 }
