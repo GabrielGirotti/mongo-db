@@ -35,4 +35,27 @@ router.get(
   ListController.getListById
 );
 
+// EDITANDO UNA LISTA
+router.put(
+  "/:id",
+  param("id").isMongoId().withMessage("El id es incorrecto"),
+  body("shopName")
+    .notEmpty()
+    .withMessage("El nombre del producto no puede ir vacio"),
+  handleInputErrors,
+  body("localName")
+    .notEmpty()
+    .withMessage("El nombre del super no puede ir vacio"),
+  handleInputErrors,
+  ListController.updateList
+);
+
+// ELIMINANDO UNA LISTA
+router.delete(
+  "/:id",
+  param("id").isMongoId().withMessage("El id es incorrecto"),
+  handleInputErrors,
+  ListController.deleteList
+);
+
 export default router;

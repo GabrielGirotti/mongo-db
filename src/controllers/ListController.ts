@@ -37,7 +37,41 @@ export class ListController {
         return res.status(404).json({ error: error.message });
       }
       res.json(list);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  // EDITANDO UNA LISTA
+
+  static updateList = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+      const list = await List.findByIdAndUpdate(id, req.body);
+      if (!list) {
+        const error = new Error("Lista no encontrada");
+        return res.status(404).json({ error: error.message });
+      }
+
+      await list.save();
+      res.json("Lista actualizada");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // ELIMINANDO UNA LISTA
+
+  static deleteList = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+      const list = await List.findById(id);
+      if (!list) {
+        const error = new Error("Lista no encontrada");
+        return res.status(404).json({ error: error.message });
+      }
+      await list.deleteOne();
+      res.send("Lista eliminada");
     } catch (error) {
       console.log(error);
     }
