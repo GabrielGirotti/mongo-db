@@ -1,29 +1,45 @@
-import mongoose from "mongoose";
-import { Schema, Document } from "mongoose";
+import mongoose, { Types, Schema, Document } from "mongoose";
 
-export type ListType = Document & {
-  shopName: string;
-  localName: string;
+const listStatus = {
+  TOSHOP: "toShop",
+  TOCHANGESOME: "toChangeSome",
+  BOUGHT: "bought",
+  IDEAS: "ideas",
+} as const;
+
+export type ListStatus = (typeof listStatus)[keyof typeof listStatus];
+
+export interface IList extends Document {
+  name: string;
   description: string;
-};
+  shop: Types.ObjectId;
+  status: ListStatus;
+}
 
-const ListSchemma: Schema = new Schema({
-  shopName: {
-    type: "string",
-    required: true,
-    trim: true,
+export const ListSchema: Schema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    shop: {
+      type: Types.ObjectId,
+      ref: "Shop",
+    },
+    status: {
+      type: String,
+      enum: Object.values(listStatus),
+      default: listStatus.TOSHOP
+    },
   },
-  localName: {
-    type: "string",
-    required: true,
-    trim: true,
-  },
-  description: {
-    type: "string",
-    required: true,
-    trim: true,
-  },
-});
+  { timestamps: true }
+);
 
-const List = mongoose.model<ListType>('List', ListSchemma)
-export default List
+const List = mongoose.model<IList>("List", ListSchema);
+export default List;
