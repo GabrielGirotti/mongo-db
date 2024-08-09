@@ -32,7 +32,7 @@ export class ShopController {
   static getShopById = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const shop = await Shop.findById(id);
+      const shop = await Shop.findById(id).populate('lists')
       if (!shop) {
         const error = new Error("Compra no encontrada");
         return res.status(404).json({ error: error.message });

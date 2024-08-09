@@ -71,4 +71,20 @@ router.post(
   ListsController.createList
 );
 
+// OBTENIENDO LISTA EN UN PROYECTO
+
+router.get(
+  "/:shopId/lists",
+  validateShopExist,
+  ListsController.getListsFromProject
+);
+
+// OBTENIENDO LISTA POR ID
+
+router.get(
+  "/:shopId/lists/:listId",
+  validateShopExist,
+  ListsController.getListById
+);
+
 export default router;
