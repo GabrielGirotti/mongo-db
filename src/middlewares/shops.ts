@@ -1,4 +1,3 @@
-import { validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 import Shop, { IShop } from "../models/Shops";
 
@@ -22,7 +21,7 @@ export async function validateShopExist(
       const error = new Error("Compra no encontrada");
       return res.status(404).json({ error: error.message });
     }
-    req.shop = shop
+    req.shop = shop;
     next();
   } catch (error) {
     res.status(500).json({ error: "Hubo un error" });

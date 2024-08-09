@@ -32,7 +32,7 @@ export class ShopController {
   static getShopById = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const shop = await Shop.findById(id).populate('lists')
+      const shop = await Shop.findById(id).populate("lists");
       if (!shop) {
         const error = new Error("Compra no encontrada");
         return res.status(404).json({ error: error.message });
@@ -48,11 +48,15 @@ export class ShopController {
   static updateShop = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const shop = await Shop.findByIdAndUpdate(id, req.body);
+      const shop = await Shop.findById(id);
       if (!shop) {
         const error = new Error("Compra no encontrada");
         return res.status(404).json({ error: error.message });
       }
+
+      shop.shopName = req.body.shopName;
+      shop.localName = req.body.localName;
+      shop.description = req.body.description;
 
       await shop.save();
       res.json("Compra actualizada");
