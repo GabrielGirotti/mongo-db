@@ -10,7 +10,7 @@ export class ListsController {
       list.shop = req.shop.id;
       req.shop.lists.push(list.id);
       await Promise.allSettled([list.save(), req.shop.save()]);
-      res.send("Tarea creada correctamente");
+      res.send("Lista creada correctamente");
     } catch (error) {
       res.status(500).json({ error: "Hubo un error" });
     }
