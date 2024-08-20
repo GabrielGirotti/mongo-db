@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import User from "../models/User";
-import { hashPassword } from "../utils/auth";
+import { checkPass, hashPassword } from "../utils/auth";
 import Token from "../models/Token";
 import { tokenGenerator } from "../utils/token";
 import { AuthEmail } from "../emails/AuthEmails";
@@ -57,7 +57,7 @@ export class AuthController {
         const error = new Error(
           "El Token ingresado ha caducado o no es valido"
         );
-        return res.status(401).json({ error: error.message });
+        return res.status(404).json({ error: error.message });
       }
 
       const user = await User.findById(tokenExist.user);
@@ -65,7 +65,45 @@ export class AuthController {
 
       await Promise.allSettled([user.save(), tokenExist.deleteOne()]);
       res.send("Cuenta confirmada correctamente");
-      
+    } catch (error) {
+      res.status(500).json({ error: "Hubo un error" });
+    }
+  };
+
+  static login = async (req: Request, res: Response) => {
+    try {
+      const { email, password } = await req.body;
+
+      const user = await User.findOne({ email });
+      if (!user) {
+        const error = new Error("El E-mail ingresado no es valido");
+        return res.status(404).json({ error: error.message });
+      }
+      if (!user.confirmed) {
+        const token = new Token();
+        token.token = tokenGenerator();
+        token.user = user.id;
+        await token.save();
+
+        //Enviando mail con Token
+        AuthEmail.sendConfirmationEmail({
+          email: user.email,
+          name: user.name,
+          token: token.token,
+        });
+
+        const error = new Error(
+          "El E-mail ingresado no esta validado, hemos enviado un nuevo mail para confirmar su cuenta"
+        );
+        return res.status(401).json({ error: error.message });
+      }
+
+      const checkingPass = await checkPass(password, user.password);
+      if (!checkingPass) {
+        const error = new Error("El password ingresado no es valido");
+        return res.status(401).json({ error: error.message });
+      }
+      res.send("Autenticado correctamente");
     } catch (error) {
       res.status(500).json({ error: "Hubo un error" });
     }
