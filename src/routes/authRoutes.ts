@@ -47,4 +47,15 @@ router.post(
   AuthController.login
 );
 
+router.post(
+  "/new-code",
+  body("email")
+    .isEmail()
+    .withMessage("Formato de email no valido")
+    .notEmpty()
+    .withMessage("El email no puede ir vacio"),
+  handleInputErrors,
+  AuthController.reqConfirmationCode
+);
+
 export default router;
