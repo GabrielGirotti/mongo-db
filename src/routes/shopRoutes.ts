@@ -5,6 +5,7 @@ import { handleInputErrors } from "../middlewares";
 import { ListsController } from "../controllers/ListsController";
 import { validateShopExist } from "../middlewares/shops";
 import { listBelongToShop, listExist } from "../middlewares/list";
+import { authenticate } from "../middlewares/auth";
 
 const router = Router();
 
@@ -12,6 +13,7 @@ const router = Router();
 
 router.post(
   "/",
+  authenticate,
   body("shopName")
     .notEmpty()
     .withMessage("El nombre de la compra no puede ir vacío"),

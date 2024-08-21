@@ -4,6 +4,7 @@ import { checkPass, hashPassword } from "../utils/auth";
 import Token from "../models/Token";
 import { tokenGenerator } from "../utils/token";
 import { AuthEmail } from "../emails/AuthEmails";
+import { generateJWT } from "../utils/jwt";
 
 export class AuthController {
   // CREANDO USUARIO
@@ -103,7 +104,10 @@ export class AuthController {
         const error = new Error("El password ingresado no es válido");
         return res.status(401).json({ error: error.message });
       }
-      res.send("Autenticado correctamente");
+
+      const token = generateJWT({id: user.id})
+
+      res.send(token);
     } catch (error) {
       res.status(500).json({ error: "Hubo un error" });
     }
