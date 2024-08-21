@@ -14,10 +14,10 @@ router.post(
   "/",
   body("shopName")
     .notEmpty()
-    .withMessage("El nombre de la compra no puede ir vacio"),
+    .withMessage("El nombre de la compra no puede ir vacío"),
   body("localName")
     .notEmpty()
-    .withMessage("El nombre del local no puede ir vacio"),
+    .withMessage("El nombre del local no puede ir vacío"),
   handleInputErrors,
   ShopController.createShop
 );
@@ -41,10 +41,10 @@ router.put(
   param("id").isMongoId().withMessage("El id es incorrecto"),
   body("shopName")
     .notEmpty()
-    .withMessage("El nombre de la compra no puede ir vacio"),
+    .withMessage("El nombre de la compra no puede ir vacío"),
   body("localName")
     .notEmpty()
-    .withMessage("El nombre del local no puede ir vacio"),
+    .withMessage("El nombre del local no puede ir vacío"),
   handleInputErrors,
   ShopController.updateShop
 );
@@ -69,8 +69,8 @@ router.post(
   "/:shopId/lists",
   body("name")
     .notEmpty()
-    .withMessage("El nombre de la lista no puede ir vacio"),
-  body("description").notEmpty().withMessage("La lista no puede ir vacia"),
+    .withMessage("El nombre de la lista no puede ir vacío"),
+  body("description").notEmpty().withMessage("La lista no puede ir vacía"),
   handleInputErrors,
   ListsController.createList
 );
@@ -103,8 +103,8 @@ router.put(
   param("listId").isMongoId().withMessage("El id es incorrecto"),
   body("name")
     .notEmpty()
-    .withMessage("El nombre de la lista no puede ir vacio"),
-  body("description").notEmpty().withMessage("La lista no puede ir vacia"),
+    .withMessage("El nombre de la lista no puede ir vacío"),
+  body("description").notEmpty().withMessage("La lista no puede ir vacía"),
   handleInputErrors,
   ListsController.updateList
 );
