@@ -8,12 +8,12 @@ import { listBelongToShop, listExist } from "../middlewares/list";
 import { authenticate } from "../middlewares/auth";
 
 const router = Router();
+router.use(authenticate)
 
 // CREANDO COMPRA
 
 router.post(
   "/",
-  authenticate,
   body("shopName")
     .notEmpty()
     .withMessage("El nombre de la compra no puede ir vacío"),
