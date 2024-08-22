@@ -28,9 +28,10 @@ export const authenticate = async (
     const verifyToken = jwt.verify(token, process.env.JWT_SECRET);
 
     if (typeof verifyToken === "object" && verifyToken.id) {
-      const user = await User.findById(verifyToken.id).select('_id name email');
+      const user = await User.findById(verifyToken.id).select("_id name email");
       if (user) {
         req.user = user;
+        next();
       } else {
         res.status(500).json({ error: "Token no valido" });
       }
@@ -38,6 +39,4 @@ export const authenticate = async (
   } catch (error) {
     res.status(500).json({ error: "Token no valido" });
   }
-
-  next();
 };
