@@ -6,6 +6,7 @@ import { ListsController } from "../controllers/ListsController";
 import { validateShopExist } from "../middlewares/shops";
 import { listBelongToShop, listExist } from "../middlewares/list";
 import { authenticate } from "../middlewares/auth";
+import { TeamController } from "../controllers/TeamController";
 
 const router = Router();
 router.use(authenticate)
@@ -129,5 +130,35 @@ router.delete(
   handleInputErrors,
   ListsController.deleteList
 );
+
+// RUTAS DEL EQUIPO ////////////////////////////////////////////////////////
+
+// BUSCANDO USUARIO
+
+router.post('/:shopId/team/find',
+  body('email').isEmail().toLowerCase().withMessage('E-mail no válido'),
+  handleInputErrors,
+  TeamController.findMemberById
+)
+
+// ASIGNANDO USUARIO A COMPRA
+
+router.post('/:shopId/team',
+  body("id").isMongoId().withMessage("El id es incorrecto"),
+  handleInputErrors,
+  TeamController.addUserToAShop
+)
+
+ // ELIMINANDO USUARIO DE UNA COMPRA
+
+router.delete('/:shopId/team',
+  body("id").isMongoId().withMessage("El id es incorrecto"),
+  handleInputErrors,
+  TeamController.deleteUserFromShop
+)
+
+// OBTENIENDO USUARIOS EN UNA COMPRA
+
+router.get("/:shopId/team", TeamController.getUsersFromShop);
 
 export default router;

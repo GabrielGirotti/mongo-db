@@ -8,6 +8,7 @@ export interface IShop extends Document {
   description: string;
   lists: PopulatedDoc<IList & Document>[];
   manager: PopulatedDoc<IUser & Document>;
+  team: PopulatedDoc<IUser & Document>[];
 }
 
 const ShopSchemma: Schema = new Schema(
@@ -37,6 +38,12 @@ const ShopSchemma: Schema = new Schema(
       type: String,
       ref: "User",
     },
+    team: [
+      {
+        type: Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );
