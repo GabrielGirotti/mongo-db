@@ -151,8 +151,8 @@ router.post('/:shopId/team',
 
  // ELIMINANDO USUARIO DE UNA COMPRA
 
-router.delete('/:shopId/team',
-  body("id").isMongoId().withMessage("El id es incorrecto"),
+router.delete('/:shopId/team/:userId',
+  param("userId").isMongoId().withMessage("El id es incorrecto"),
   handleInputErrors,
   TeamController.deleteUserFromShop
 )

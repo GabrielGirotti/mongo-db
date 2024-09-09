@@ -47,14 +47,14 @@ export class TeamController {
   // ELIMINANDO USUARIO DE UNA COMPRA
 
   static deleteUserFromShop = async (req: Request, res: Response) => {
-    const { id } = req.body;
+    const { userId } = req.params;
 
-    if (!req.shop.team.includes(id)) {
+    if (!req.shop.team.toString().includes(userId)) {
       const error = new Error("El usuario no se encuentra en la compra");
       return res.status(404).json({ error: error.message });
     }
 
-    req.shop.team = req.shop.team.filter((member) => member.toString() !== id);
+    req.shop.team = req.shop.team.filter((member) => member.toString() !== userId);
     await req.shop.save();
     res.send("Usuario eliminado de la compra");
   };
