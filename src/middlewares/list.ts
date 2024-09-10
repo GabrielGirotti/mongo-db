@@ -39,3 +39,16 @@ export async function listBelongToShop(
   }
   next();
 }
+
+export async function hasAuth(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  if (req.user.id.toString() !== req.shop.manager.toString()) {
+    const error = new Error("No tiene los permisos necesarios");
+    return res.status(400).json({ error: error.message });
+  }
+  next();
+}
+

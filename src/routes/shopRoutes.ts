@@ -4,7 +4,7 @@ import { body, param } from "express-validator";
 import { handleInputErrors } from "../middlewares";
 import { ListsController } from "../controllers/ListsController";
 import { validateShopExist } from "../middlewares/shops";
-import { listBelongToShop, listExist } from "../middlewares/list";
+import { hasAuth, listBelongToShop, listExist } from "../middlewares/list";
 import { authenticate } from "../middlewares/auth";
 import { TeamController } from "../controllers/TeamController";
 
@@ -126,6 +126,7 @@ router.post(
 
 router.delete(
   "/:shopId/lists/:listId",
+  hasAuth,
   param("listId").isMongoId().withMessage("El id es incorrecto"),
   handleInputErrors,
   ListsController.deleteList

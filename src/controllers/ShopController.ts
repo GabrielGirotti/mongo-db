@@ -24,7 +24,7 @@ export class ShopController {
   static getAllShops = async (req: Request, res: Response) => {
     try {
       const allShops = await Shop.find({
-        $or: [{ manager: { $in: req.user.id } }],
+        $or: [{ manager: { $in: req.user.id } }, { team: { $in: req.user.id } }],
       });
 
       res.json(allShops);
@@ -44,7 +44,7 @@ export class ShopController {
         return res.status(404).json({ error: error.message });
       }
 
-      if (shop.manager.toString() !== req.user.id.toString()) {
+      if (shop.manager.toString() !== req.user.id.toString() && !shop.team.includes(req.user.id)) {
         const error = new Error(
           "No tiene los privilegios para ver esta compra"
         );
