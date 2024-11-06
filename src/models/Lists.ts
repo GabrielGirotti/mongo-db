@@ -13,6 +13,10 @@ export interface IList extends Document {
   name: string;
   description: string;
   shop: Types.ObjectId;
+  completedBy: {
+    user: Types.ObjectId;
+    status: ListStatus;
+  }[];
   status: ListStatus;
 }
 
@@ -35,8 +39,22 @@ export const ListSchema: Schema = new Schema(
     status: {
       type: String,
       enum: Object.values(listStatus),
-      default: listStatus.TOSHOP
+      default: listStatus.TOSHOP,
     },
+    completedBy: [
+      {
+        user: {
+          type: Types.ObjectId,
+          ref: "User",
+          default: null,
+        },
+        status: {
+          type: String,
+          enum: Object.values(listStatus),
+          default: listStatus.TOSHOP,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -31,7 +31,11 @@ export class ListsController {
 
   static getListById = async (req: Request, res: Response) => {
     try {
-      res.json(req.list);
+      const list = await List.findById(req.list.id).populate({
+        path: "completedBy.user",
+        select: "id name email",
+      });
+      res.json(list);
     } catch (error) {
       res.status(500).json({ error: "Hubo un error" });
     }
@@ -56,6 +60,13 @@ export class ListsController {
     try {
       const { status } = req.body;
       req.list.status = status;
+
+      const data = {
+        user: req.user.id,
+        status: status,
+      };
+
+      req.list.completedBy.push(data);
 
       await req.list.save();
       res.send("Estado actualizado");
